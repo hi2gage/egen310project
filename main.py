@@ -55,8 +55,8 @@ def read_sensor(trans_pin, sensor_pin):
 # Checks to see if it is the proper time to check the plant
 def is_it_time_yet(first, second):
     year, month, day, hour, minute, second = map(int, time.strftime("%Y %m %d %H %M %S").split())
-    # print(str(hour) + " " + str(min))
-    return hour == first or hour == second and min == 14 and sec < 30
+    # print(str(hour) + " " + str(minute))
+    return hour == first or hour == second and minute == 49 and second < 30
 
 
 def main(first, second):
@@ -64,6 +64,9 @@ def main(first, second):
         pump_pin = 7
         sensor_pin = 33
         trans_pin = 37
+
+        # Change this to the moisture point
+        moisture_thresh = 100
 
         GPIO.setup(pump_pin, GPIO.OUT)
         GPIO.output(pump_pin, GPIO.HIGH)
@@ -74,7 +77,7 @@ def main(first, second):
                 data = read_sensor(trans_pin, sensor_pin)
                 print("The moisture is: " + str(data))
 
-                if data > 100:
+                if data > moisture_thresh:
                     pump_on(pump_pin)
                     time.sleep(3)
                     pump_off(pump_pin)
