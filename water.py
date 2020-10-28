@@ -8,13 +8,6 @@ init = False
 GPIO.setmode(GPIO.BOARD)  # Broadcom pin-numbering scheme
 
 
-def get_last_watered():
-    try:
-        f = open("last_watered.txt", "r")
-        return f.readline()
-    except FileNotFoundError:
-        return "NEVER!"
-
 
 def get_status(pin=8):
     GPIO.setup(pin, GPIO.IN)
@@ -27,11 +20,14 @@ def init_output(pin):
     GPIO.output(pin, GPIO.HIGH)
 
 
-
+# this is the start of the auto watering system. 
 def auto_water(delay=5, pump_pin=7, water_sensor_pin=8):
     consecutive_water_count = 0
+    
+    # this will assign the GPIOs 
     init_output(pump_pin)
     print("Here we go! Press CTRL+C to exit")
+    
     pump_on()
     try:
         while 1 and consecutive_water_count < 10:
@@ -49,18 +45,12 @@ def auto_water(delay=5, pump_pin=7, water_sensor_pin=8):
 
 def pump_on(pump_pin=7, delay=1):
     init_output(pump_pin)
-    record_data()
     GPIO.output(pump_pin, GPIO.LOW)
     time.sleep(1)
     GPIO.output(pump_pin, GPIO.HIGH)
 
 
-# This will record the data to some sort of file. Either database or text file
-def record_data(filename=""):
-    f = open("last_watered.txt", "a")
-    f.write("Last watered {}\n".format(datetime.datetime.now()))
-    f.close()
-    print("hello")
+
 
 
 

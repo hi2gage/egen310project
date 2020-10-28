@@ -1,5 +1,6 @@
 /.idea/*
-
+water.py
+last_watered.txt
 
 
 .DS_Store
